@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 
 const AddressSchema = new Schema({
-	countryCode: { type: String, required: true, unique: true },
+	countryCode: { type: String, required: true },
 	data: { type: Schema.Types.Mixed, required: true },
 });
 
@@ -196,18 +196,31 @@ async function seedingValidator() {
 		const jsonSchemaValidator = {
 			$schema: "https://json-schema.org/draft/2020-12/schema",
 			type: "object",
-			properties: {
-				addressLine1: { type: "string", minLength: 1 },
-				addressLine2: { type: "string" },
-				city: { type: "string", minLength: 1 },
-				state: {
-					type: "string",
-					enum: ["CA", "NY", "TX"],
+			anyOf: [
+				{
+					properties: {
+						id: { type: "string" },
+						formattedAddress: { type: "string" },
+						displayName: { type: "object" },
+					},
+					required: ["id", "formattedAddress", "displayName"],
+					additionalProperties: false,
 				},
-				zipCode: { type: "string", pattern: "^[0-9]{5}$" },
-			},
-			required: ["addressLine1", "city", "state", "zipCode"],
-			additionalProperties: false,
+				{
+					properties: {
+						addressLine1: { type: "string", minLength: 1 },
+						addressLine2: { type: "string" },
+						city: { type: "string", minLength: 1 },
+						state: {
+							type: "string",
+							enum: ["CA", "NY", "TX"],
+						},
+						zipCode: { type: "string", pattern: "^[0-9]{5}$" },
+					},
+					required: ["addressLine1", "city", "state", "zipCode"],
+					additionalProperties: false,
+				},
+			],
 		};
 
 		await Validator.create({
@@ -220,18 +233,31 @@ async function seedingValidator() {
 		const jsonSchemaValidator = {
 			$schema: "https://json-schema.org/draft/2020-12/schema",
 			type: "object",
-			properties: {
-				addressLine1: { type: "string", minLength: 1 },
-				addressLine2: { type: "string" },
-				suburb: { type: "string", minLength: 1 },
-				state: {
-					type: "string",
-					enum: ["NSW", "VIC", "QLD", "WA", "SA", "TAS", "ACT", "NT"],
+			anyOf: [
+				{
+					properties: {
+						id: { type: "string" },
+						formattedAddress: { type: "string" },
+						displayName: { type: "object" },
+					},
+					required: ["id", "formattedAddress", "displayName"],
+					additionalProperties: false,
 				},
-				postcode: { type: "string", pattern: "^[0-9]{4}$" },
-			},
-			required: ["addressLine1", "suburb", "state", "postcode"],
-			additionalProperties: false,
+				{
+					properties: {
+						addressLine1: { type: "string", minLength: 1 },
+						addressLine2: { type: "string" },
+						suburb: { type: "string", minLength: 1 },
+						state: {
+							type: "string",
+							enum: ["NSW", "VIC", "QLD", "WA", "SA", "TAS", "ACT", "NT"],
+						},
+						postcode: { type: "string", pattern: "^[0-9]{4}$" },
+					},
+					required: ["addressLine1", "suburb", "state", "postcode"],
+					additionalProperties: false,
+				},
+			],
 		};
 
 		await Validator.create({
@@ -244,16 +270,35 @@ async function seedingValidator() {
 		const jsonSchemaValidator = {
 			$schema: "https://json-schema.org/draft/2020-12/schema",
 			type: "object",
-			properties: {
-				province: { type: "string" },
-				city: { type: "string" },
-				district: { type: "string" },
-				village: { type: "string" },
-				postalCode: { type: "string", pattern: "^[0-9]{5}$" },
-				streetAddress: { type: "string" },
-			},
-			required: ["province", "city", "district", "postalCode", "streetAddress"],
-			additionalProperties: false,
+			anyOf: [
+				{
+					properties: {
+						id: { type: "string" },
+						formattedAddress: { type: "string" },
+						displayName: { type: "object" },
+					},
+					required: ["id", "formattedAddress", "displayName"],
+					additionalProperties: false,
+				},
+				{
+					properties: {
+						province: { type: "string" },
+						city: { type: "string" },
+						district: { type: "string" },
+						village: { type: "string" },
+						postalCode: { type: "string", pattern: "^[0-9]{5}$" },
+						streetAddress: { type: "string" },
+					},
+					required: [
+						"province",
+						"city",
+						"district",
+						"postalCode",
+						"streetAddress",
+					],
+					additionalProperties: false,
+				},
+			],
 		};
 
 		await Validator.create({

@@ -65,6 +65,8 @@ const DynamicForm = ({ config, countryCode }: Props) => {
 			);
 
 			toast.success(data.message);
+			setErrors({});
+			setFormData({});
 		} catch (error) {
 			const message =
 				error instanceof AxiosError

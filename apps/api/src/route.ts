@@ -1,11 +1,17 @@
-import express, { type Request, type Response } from "express";
-import { Address, FormConfig, Validator } from "./schema";
 import Ajv2020 from "ajv/dist/2020";
 import addFormats from "ajv-formats";
+import express, { type Request, type Response } from "express";
+import { Address, FormConfig, Validator } from "./schema";
 
 const router = express.Router();
 const ajv = new Ajv2020({ strict: false });
 addFormats(ajv);
+
+router.get("/addresses/:countryCode", async (req: Request, res: Response) => {
+	const { countryCode } = req.params;
+	const addresses = await Address.find({ countryCode });
+	res.json(addresses);
+});
 
 router.get("/validators/:countryCode", async (req: Request, res: Response) => {
 	const { countryCode } = req.params;

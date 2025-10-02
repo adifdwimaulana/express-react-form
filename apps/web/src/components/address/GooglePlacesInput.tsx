@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { Loader2Icon, MapPin } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +21,7 @@ const GooglePlacesInput = ({ countryCode }: Props) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isOpenPanel, setIsOpenPanel] = useState(false);
 
+	const isSelectingRef = useRef(false);
 	const debouncedInput = useDebounce(inputValue, 500);
 
 	const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +30,12 @@ const GooglePlacesInput = ({ countryCode }: Props) => {
 	};
 
 	const fetchSuggestion = useCallback(async () => {
+		// INFO: skip fetching when onClick suggestion
+		if (isSelectingRef.current) {
+			isSelectingRef.current = false;
+			return;
+		}
+
 		if (debouncedInput.length === 0) {
 			setSuggestions([]);
 			return;
@@ -50,7 +57,10 @@ const GooglePlacesInput = ({ countryCode }: Props) => {
 			setSuggestions(data.places || []);
 			setIsOpenPanel(true);
 		} catch (error) {
-			const message = error instanceof Error ? error.message : "Unknown error";
+			const message =
+				error instanceof AxiosError
+					? error.response?.data.message
+					: "Unknown error";
 			toast.error(`Failed to fetch address suggestions: ${message}`);
 			setSuggestions([]);
 			setIsOpenPanel(false);
@@ -60,6 +70,7 @@ const GooglePlacesInput = ({ countryCode }: Props) => {
 	}, [debouncedInput]);
 
 	const onSelectSuggestion = (suggestion: Place) => {
+		isSelectingRef.current = true;
 		setInputValue(suggestion.displayName.text);
 		setSelectedPlace(suggestion);
 		setIsOpenPanel(false);
@@ -78,6 +89,8 @@ const GooglePlacesInput = ({ countryCode }: Props) => {
 			);
 
 			toast.success(data.message);
+			setInputValue("");
+			setSelectedPlace(null);
 		} catch (error) {
 			const message =
 				error instanceof AxiosError
@@ -110,9 +123,9 @@ const GooglePlacesInput = ({ countryCode }: Props) => {
 			{suggestions.length > 0 && isOpenPanel && (
 				<div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
 					{suggestions.map((suggestion) => (
-						// biome-ignore lint/a11y/useFocusableInteractive: <explanation>
-						// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-						// biome-ignore lint/a11y/useSemanticElements: <explanation>
+						// biome-ignore lint/a11y/useFocusableInteractive: div with role button is acceptable here
+						// biome-ignore lint/a11y/useKeyWithClickEvents: keyboard support not required for this simple suggestion list
+						// biome-ignore lint/a11y/useSemanticElements: div with role button is acceptable here
 						<div
 							role="button"
 							key={suggestion.id}
