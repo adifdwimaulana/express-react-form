@@ -125,6 +125,13 @@ This will concurrently start:
   - Place details retrieval
   - Address validation
 
+### Screenshots
+**Google Places API**
+![Auto Complete Form](/images/autocomplete.jpeg)
+
+**Dynamic Form**
+![Manual Form](/images/manual.jpeg)
+
 ## 📝 License
 
 This project is licensed under the MIT License.
