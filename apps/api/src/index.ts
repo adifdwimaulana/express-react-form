@@ -1,4 +1,5 @@
 import express, { type Request, type Response } from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { seedingFormConfig, seedingValidator } from "./schema";
@@ -6,6 +7,7 @@ import { router } from "./route";
 
 dotenv.config();
 const app = express();
+app.use(cors({ origin: ["http://localhost:5173"] }));
 app.use(express.json());
 app.use("/api/v1", router);
 

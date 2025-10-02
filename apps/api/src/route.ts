@@ -15,7 +15,7 @@ router.get("/validators/:countryCode", async (req: Request, res: Response) => {
 		return res.status(404).json({ message: "Validator not found" });
 	}
 
-	res.json({ data: validator });
+	res.json(validator);
 });
 
 router.get("/forms/:countryCode", async (req: Request, res: Response) => {
@@ -26,7 +26,7 @@ router.get("/forms/:countryCode", async (req: Request, res: Response) => {
 		return res.status(404).json({ message: "Form config not found" });
 	}
 
-	res.json({ data: formConfig });
+	res.json(formConfig);
 });
 
 router.post("/addresses", async (req: Request, res: Response) => {
@@ -59,9 +59,7 @@ router.post("/addresses", async (req: Request, res: Response) => {
 	const address = new Address({ countryCode, data });
 	await address.save();
 
-	res
-		.status(201)
-		.json({ message: "Address saved successfully", data: address });
+	res.status(201).json({ message: "Address saved successfully" });
 });
 
 export { router };

@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { model, Schema } from "mongoose";
 
 const AddressSchema = new Schema({
 	countryCode: { type: String, required: true, unique: true },
@@ -50,25 +50,28 @@ async function seedingFormConfig() {
 				label: "Address Line 1",
 				component: "text",
 				required: true,
+				placeholder: "123 Main St",
 			},
 			{
 				key: "addressLine2",
 				label: "Address Line 2",
 				component: "text",
-				required: true,
+				required: false,
 			},
 			{
 				key: "city",
 				label: "City",
 				component: "text",
 				required: true,
+				placeholder: "Los Angeles",
 			},
 			{
 				key: "state",
 				label: "State",
 				component: "select",
 				required: true,
-				optionsFromSchemaEnum: "state",
+				options: ["CA", "NY", "TX"],
+				placeholder: "Select State",
 			},
 			{
 				key: "zipCode",
@@ -92,6 +95,7 @@ async function seedingFormConfig() {
 				label: "Address Line 1",
 				component: "text",
 				required: true,
+				placeholder: "123 Main St",
 			},
 			{
 				key: "addressLine2",
@@ -99,13 +103,20 @@ async function seedingFormConfig() {
 				component: "text",
 				required: false,
 			},
-			{ key: "suburb", label: "Suburb", component: "text", required: true },
+			{
+				key: "suburb",
+				label: "Suburb",
+				component: "text",
+				required: true,
+				placeholder: "Sydney",
+			},
 			{
 				key: "state",
 				label: "State",
 				component: "select",
 				required: true,
-				optionsFromSchemaEnum: "state",
+				options: ["NSW", "VIC", "QLD", "WA", "SA", "TAS", "ACT", "NT"],
+				placeholder: "Select State",
 			},
 			{
 				key: "postcode",
@@ -130,10 +141,29 @@ async function seedingFormConfig() {
 				component: "select",
 				required: true,
 				options: ["Jawa Barat", "Bali", "Sumatra Utara"],
+				placeholder: "Select Province",
 			},
-			{ key: "city", label: "City", component: "text", required: true },
-			{ key: "district", label: "District", component: "text", required: true },
-			{ key: "village", label: "Village", component: "text", required: false },
+			{
+				key: "city",
+				label: "City",
+				component: "text",
+				required: true,
+				placeholder: "Bandung",
+			},
+			{
+				key: "district",
+				label: "District",
+				component: "text",
+				required: true,
+				placeholder: "Bojongsoang",
+			},
+			{
+				key: "village",
+				label: "Village",
+				component: "text",
+				required: false,
+				placeholder: "Cibiru",
+			},
 			{
 				key: "postalCode",
 				label: "Postal Code",
@@ -146,6 +176,7 @@ async function seedingFormConfig() {
 				label: "Street Address",
 				component: "textarea",
 				required: true,
+				placeholder: "Jalan Raya No.123",
 			},
 		];
 
