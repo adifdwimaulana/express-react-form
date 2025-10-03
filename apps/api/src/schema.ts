@@ -51,7 +51,6 @@ async function seedingFormConfig() {
 				component: "text",
 				required: true,
 				placeholder: "123 Main St",
-				maxLength: 5,
 			},
 			{
 				key: "addressLine2",
@@ -80,6 +79,7 @@ async function seedingFormConfig() {
 				component: "text",
 				required: true,
 				placeholder: "12345",
+				maxLength: 5,
 			},
 		];
 
