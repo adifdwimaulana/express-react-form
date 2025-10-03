@@ -35,27 +35,28 @@ const AddressForm = () => {
 		setSelectedCountry(countryCode);
 	};
 
-	const fetchFormConfig = useCallback(async () => {
-		if (!selectedCountry) return;
-
-		try {
-			const response = await apiClient.get<FormConfig>(
-				`/v1/forms/${selectedCountry}`,
-			);
-
-			const { config } = response.data;
-			setFormConfig(config);
-		} catch (error: unknown) {
-			const message = error instanceof Error ? error.message : "Unknown error";
-			toast.error(`Failed to load form config: ${message}`, {
-				duration: 3000,
-			});
-		}
-	}, [selectedCountry]);
-
 	useEffect(() => {
+		async function fetchFormConfig() {
+			if (!selectedCountry) return;
+
+			try {
+				const response = await apiClient.get<FormConfig>(
+					`/v1/forms/${selectedCountry}`,
+				);
+
+				const { config } = response.data;
+				setFormConfig(config);
+			} catch (error: unknown) {
+				const message =
+					error instanceof Error ? error.message : "Unknown error";
+				toast.error(`Failed to load form config: ${message}`, {
+					duration: 3000,
+				});
+			}
+		}
+
 		fetchFormConfig();
-	}, [fetchFormConfig]);
+	}, [selectedCountry]);
 
 	const isAutoComplete = mode === "autocomplete";
 

@@ -114,6 +114,8 @@ const DynamicForm = ({ config, countryCode }: Props) => {
 						value={value}
 						onChange={(e) => handleChange(e.target.value)}
 						className={className}
+						placeholder={field.placeholder || `Enter ${field.label}`}
+						maxLength={field.maxLength}
 					/>
 				);
 		}

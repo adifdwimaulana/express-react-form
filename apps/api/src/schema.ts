@@ -18,7 +18,7 @@ const FormFieldSchema = new Schema(
 		required: { type: Boolean, default: false },
 		placeholder: { type: String },
 		options: [{ type: String }],
-		optionsFromSchemaEnum: { type: String },
+		maxLength: { type: Number },
 	},
 	{ _id: false },
 );
@@ -51,6 +51,7 @@ async function seedingFormConfig() {
 				component: "text",
 				required: true,
 				placeholder: "123 Main St",
+				maxLength: 5,
 			},
 			{
 				key: "addressLine2",
@@ -124,6 +125,7 @@ async function seedingFormConfig() {
 				component: "text",
 				required: true,
 				placeholder: "2000",
+				maxLength: 4,
 			},
 		];
 
@@ -170,6 +172,7 @@ async function seedingFormConfig() {
 				component: "text",
 				required: true,
 				placeholder: "12345",
+				maxLength: 5,
 			},
 			{
 				key: "streetAddress",

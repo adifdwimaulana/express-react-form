@@ -29,46 +29,6 @@ const GooglePlacesInput = ({ countryCode }: Props) => {
 		setInputValue(e.target.value);
 	};
 
-	const fetchSuggestion = useCallback(async () => {
-		// INFO: skip fetching when onClick suggestion
-		if (isSelectingRef.current) {
-			isSelectingRef.current = false;
-			return;
-		}
-
-		if (debouncedInput.length === 0) {
-			setSuggestions([]);
-			return;
-		}
-
-		if (debouncedInput.length < 3) {
-			return;
-		}
-
-		setIsLoading(true);
-		try {
-			const { data } = await sdkClient.post<{ places: Place[] }>(
-				"/places:searchText",
-				{
-					textQuery: debouncedInput,
-				},
-			);
-
-			setSuggestions(data.places || []);
-			setIsOpenPanel(true);
-		} catch (error) {
-			const message =
-				error instanceof AxiosError
-					? error.response?.data.message
-					: "Unknown error";
-			toast.error(`Failed to fetch address suggestions: ${message}`);
-			setSuggestions([]);
-			setIsOpenPanel(false);
-		} finally {
-			setIsLoading(false);
-		}
-	}, [debouncedInput]);
-
 	const onSelectSuggestion = (suggestion: Place) => {
 		isSelectingRef.current = true;
 		setInputValue(suggestion.displayName.text);
@@ -77,8 +37,48 @@ const GooglePlacesInput = ({ countryCode }: Props) => {
 	};
 
 	useEffect(() => {
+		async function fetchSuggestion() {
+			// INFO: skip fetching when onClick suggestion
+			if (isSelectingRef.current) {
+				isSelectingRef.current = false;
+				return;
+			}
+
+			if (debouncedInput.length === 0) {
+				setSuggestions([]);
+				return;
+			}
+
+			if (debouncedInput.length < 3) {
+				return;
+			}
+
+			setIsLoading(true);
+			try {
+				const { data } = await sdkClient.post<{ places: Place[] }>(
+					"/places:searchText",
+					{
+						textQuery: debouncedInput,
+					},
+				);
+
+				setSuggestions(data.places || []);
+				setIsOpenPanel(true);
+			} catch (error) {
+				const message =
+					error instanceof AxiosError
+						? error.response?.data.message
+						: "Unknown error";
+				toast.error(`Failed to fetch address suggestions: ${message}`);
+				setSuggestions([]);
+				setIsOpenPanel(false);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+
 		fetchSuggestion();
-	}, [fetchSuggestion]);
+	}, [debouncedInput]);
 
 	const handleSubmit = async () => {
 		setIsSubmitting(true);

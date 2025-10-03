@@ -5,6 +5,7 @@ export interface FormField {
 	required: boolean;
 	options: string[];
 	placeholder?: string;
+	maxLength?: number;
 }
 
 export interface FormConfig {
